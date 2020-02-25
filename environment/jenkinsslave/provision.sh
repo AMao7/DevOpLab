@@ -14,11 +14,13 @@ sudo apt-get install python-software-properties -y
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install nodejs -y
 
-sudo apt-get install openjdk-8-jre-headless -y
 # install pm2
 sudo npm install pm2 -g
+sudo apt-get install openjdk-8-jre-headless -y
 
 sudo apt-get install nginx -y
 
 # finally, restart the nginx service so the new config takes hold
 sudo service nginx restart
+
+sudo cat /vagrant/environment/jenkinsslave/jenkin_key.pub >> /home/vagrant/.ssh/authorized_keys

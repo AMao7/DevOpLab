@@ -45,10 +45,17 @@
     - name: ensure npm is present
       apt: name=npm state=present
 
-
+    - name: export
+      shell: echo "export DB_HOST=mongodb://192.168.10.150:27017/posts" >> /home/vagrant/.bashrc
 
     - name: install pm2 is with npm
       command: npm install pm2 -g
+
+    - name: nginx restart
+      service:
+        name: nginx
+        state: restarted
+        enabled: True
 
 
 
@@ -83,3 +90,7 @@
 
     - name: changing the config on db
       shell: sudo rm /etc/mongod.conf; sudo ln -s /home/ubuntu/environment/mongod.conf /etc/mongod.conf
+
+
+    - name: update
+      shell: sudo systemctl restart mongod; sudo systemctl enable mongod

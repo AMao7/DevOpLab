@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
+
   config.vm.define "db" do |db|
     db.vm.box = "ubuntu/bionic64"
     db.vm.network "private_network", ip: "192.168.10.150"
@@ -29,6 +30,18 @@ Vagrant.configure("2") do |config|
     end
 
     db.vm.provider "virtualbox" do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+    end
+  end
+
+  config.vm.define "jenkinsslave" do |jenkinsslave|
+    jenkinsslave.vm.box = "ubuntu/bionic64"
+      jenkinsslave.vm.network "private_network", ip: "192.168.10.200"
+    jenkinsslave.hostsupdater.aliases = ["localhost:8080 "]
+    jenkinsslave.vm.synced_folder "environment/jenkinsslave", "/home/ubuntu/jenkins"
+    jenkinsslave.vm.provision "shell", path: "environment/jenkinsslave/provision.sh", privileged: false
+    jenkinsslave.vm.provider "virtualbox" do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
